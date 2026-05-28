@@ -32,23 +32,32 @@ export default function OnboardingPage() {
 
   async function finish() {
     setSaving(true);
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { router.push("/auth/login"); return; }
 
-    await supabase.from("profiles").update({
-      ...profile,
-      onboarding_complete: true,
-    }).eq("id", user.id);
+      await supabase.from("profiles").update({
+        full_name: profile.full_name,
+        user_type: profile.user_type,
+        college: profile.college,
+        company: profile.company,
+        city: profile.city,
+        bio: profile.bio,
+        onboarding_complete: true,
+      }).eq("id", user.id);
 
-    const skillInserts = [
-      ...teachSkills.map(s => ({ user_id: user.id, skill_name: s, skill_type: "teach" as const })),
-      ...learnSkills.map(s => ({ user_id: user.id, skill_name: s, skill_type: "learn" as const })),
-    ];
-    if (skillInserts.length > 0) {
-      await supabase.from("user_skills").upsert(skillInserts, { onConflict: "user_id,skill_name,skill_type" });
+      const skillInserts = [
+        ...teachSkills.map(s => ({ user_id: user.id, skill_name: s, skill_type: "teach" as const, is_verified: false })),
+        ...learnSkills.map(s => ({ user_id: user.id, skill_name: s, skill_type: "learn" as const, is_verified: false })),
+      ];
+      if (skillInserts.length > 0) {
+        await supabase.from("user_skills").upsert(skillInserts, { onConflict: "user_id,skill_name,skill_type" });
+      }
+    } catch (e) {
+      console.error("Onboarding error:", e);
+    } finally {
+      router.push("/feed");
     }
-
-    router.push("/feed");
   }
 
   return (
