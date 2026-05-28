@@ -18,10 +18,10 @@ interface ProfileClientProps {
 
 export default function ProfileClient({ profile, mySkills, ratings, userId }: ProfileClientProps) {
   const supabase = createClient();
-  const [editing, setEditing] = useState(false);
-  const [bio, setBio] = useState(profile?.bio || "");
+  const [editing, setEditing]       = useState(false);
+  const [bio, setBio]               = useState(profile?.bio || "");
   const [addingSkill, setAddingSkill] = useState<"teach" | "learn" | null>(null);
-  const [saving, setSaving] = useState(false);
+  const [saving, setSaving]         = useState(false);
   const [localSkills, setLocalSkills] = useState(mySkills);
 
   const teachSkills = localSkills.filter(s => s.skill_type === "teach");
@@ -57,35 +57,45 @@ export default function ProfileClient({ profile, mySkills, ratings, userId }: Pr
     : null;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
+    <div className="min-h-screen" style={{ background: "var(--bg)" }}>
       <Navbar coins={profile?.swapcoin_balance || 0} />
 
-      <main className="md:ml-64 pb-20 md:pb-0 px-6 py-8 max-w-3xl mx-auto">
+      <main className="md:ml-56 pb-20 md:pb-0 px-6 py-8 max-w-2xl mx-auto">
+
         {/* Profile header */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-8"
+        >
           <div className="flex items-start gap-5">
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-400 to-accent-500 flex items-center justify-center text-3xl font-black flex-shrink-0">
+            <div
+              className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-black flex-shrink-0"
+              style={{ background: "linear-gradient(135deg, #9B1B30, #620018)", color: "white" }}
+            >
               {profile?.full_name?.charAt(0) || "?"}
             </div>
             <div className="flex-1">
-              <h1 className="text-2xl font-black">{profile?.full_name}</h1>
-              <div className="flex items-center gap-3 text-sm text-slate-400 mt-1">
+              <h1 className="text-2xl font-black mb-1" style={{ color: "var(--text)" }}>{profile?.full_name}</h1>
+              <div className="flex items-center gap-3 text-xs mb-3" style={{ color: "var(--text-3)" }}>
                 {(profile?.college || profile?.company) && (
                   <span className="flex items-center gap-1">
-                    <MapPin size={12} />
+                    <MapPin size={11} />
                     {profile.college || profile.company}
                   </span>
                 )}
                 {profile?.city && <span>{profile.city}</span>}
               </div>
-              <div className="flex items-center gap-4 mt-3">
+              <div className="flex items-center gap-3">
                 {avgStars && (
-                  <span className="flex items-center gap-1 text-amber-400 text-sm font-semibold">
-                    <Star size={14} fill="currentColor" />
-                    {avgStars} ({ratings.length} reviews)
+                  <span className="flex items-center gap-1 text-sm font-semibold" style={{ color: "var(--coin)" }}>
+                    <Star size={13} fill="currentColor" />
+                    {avgStars}
+                    <span style={{ color: "var(--text-3)", fontWeight: 400 }}>({ratings.length} reviews)</span>
                   </span>
                 )}
-                <span className="coin-badge">🪙 {profile?.swapcoin_balance || 0}</span>
+                <div className="coin-badge">{profile?.swapcoin_balance || 0} coins</div>
               </div>
             </div>
           </div>
@@ -99,22 +109,42 @@ export default function ProfileClient({ profile, mySkills, ratings, userId }: Pr
                   onChange={e => setBio(e.target.value)}
                   placeholder="Write a short bio…"
                   rows={2}
-                  className="flex-1 px-4 py-3 rounded-xl border border-white/10 bg-white/5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-400 text-sm resize-none"
+                  className="input-base text-sm resize-none"
                 />
                 <div className="flex flex-col gap-2">
-                  <button onClick={saveBio} disabled={saving} className="p-2.5 rounded-xl bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 transition-all">
-                    {saving ? <span className="w-4 h-4 border-2 border-emerald-300/30 border-t-emerald-300 rounded-full animate-spin inline-block" /> : <Check size={16} />}
+                  <button
+                    onClick={saveBio}
+                    disabled={saving}
+                    className="p-2.5 rounded-xl transition-all"
+                    style={{ background: "rgba(155,27,48,0.12)", color: "#E07080", border: "1px solid rgba(155,27,48,0.22)" }}
+                  >
+                    {saving
+                      ? <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin inline-block" />
+                      : <Check size={15} />
+                    }
                   </button>
-                  <button onClick={() => setEditing(false)} className="p-2.5 rounded-xl bg-white/5 text-slate-400 hover:bg-white/10 transition-all">
-                    <X size={16} />
+                  <button
+                    onClick={() => setEditing(false)}
+                    className="p-2.5 rounded-xl transition-all"
+                    style={{ background: "rgba(255,255,255,0.04)", color: "var(--text-3)", border: "1px solid var(--border-soft)" }}
+                  >
+                    <X size={15} />
                   </button>
                 </div>
               </div>
             ) : (
               <div className="flex items-start gap-2">
-                <p className="text-slate-400 text-sm flex-1">{bio || "Add a short bio to tell others about yourself."}</p>
-                <button onClick={() => setEditing(true)} className="p-2 rounded-lg text-slate-500 hover:text-white hover:bg-white/5 transition-all flex-shrink-0">
-                  <Edit2 size={14} />
+                <p className="text-sm flex-1 leading-relaxed" style={{ color: bio ? "var(--text-2)" : "var(--text-3)" }}>
+                  {bio || "Add a short bio to tell others about yourself."}
+                </p>
+                <button
+                  onClick={() => setEditing(true)}
+                  className="p-2 rounded-lg transition-all flex-shrink-0"
+                  style={{ color: "var(--text-3)" }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--text)"; (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.04)"; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--text-3)"; (e.currentTarget as HTMLElement).style.background = "transparent"; }}
+                >
+                  <Edit2 size={13} />
                 </button>
               </div>
             )}
@@ -122,46 +152,66 @@ export default function ProfileClient({ profile, mySkills, ratings, userId }: Pr
         </motion.div>
 
         {/* Skills sections */}
-        {[
-          { type: "teach" as const, skills: teachSkills, label: "Skills I can teach", color: "emerald", bg: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30" },
-          { type: "learn" as const, skills: learnSkills, label: "Skills I want to learn", color: "violet", bg: "bg-violet-500/20 text-violet-300 border-violet-500/30" },
-        ].map(section => (
+        {([
+          { type: "teach" as const, skills: teachSkills, label: "Skills I can teach" },
+          { type: "learn" as const, skills: learnSkills, label: "Skills I want to learn" },
+        ] as const).map(section => (
           <motion.div
             key={section.type}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
             className="mb-8"
           >
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-black">{section.label}</h2>
+              <h2 className="text-base font-black" style={{ color: "var(--text)" }}>{section.label}</h2>
               <button
                 onClick={() => setAddingSkill(section.type)}
-                className="flex items-center gap-1 text-sm text-slate-400 hover:text-white transition-colors"
+                className="flex items-center gap-1 text-xs font-medium transition-all"
+                style={{ color: "var(--text-3)" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--text)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--text-3)"; }}
               >
-                <Plus size={16} /> Add
+                <Plus size={14} /> Add
               </button>
             </div>
 
             <div className="flex flex-wrap gap-2 mb-3">
               {section.skills.map(skill => (
-                <div key={skill.skill_name} className={`flex items-center gap-2 px-3 py-2 rounded-xl border ${section.bg} text-sm font-medium`}>
+                <div
+                  key={skill.skill_name}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium ${
+                    section.type === "teach" ? "skill-chip-teach" : "skill-chip-learn"
+                  }`}
+                >
                   <span>{getSkillEmoji(skill.skill_name)}</span>
                   <span>{skill.skill_name}</span>
-                  {skill.is_verified && <span className="text-xs">✅</span>}
-                  {section.type === "teach" && !skill.is_verified && (
-                    <Link href={`/quiz?skill=${encodeURIComponent(skill.skill_name)}`} className="text-xs opacity-70 hover:opacity-100">verify→</Link>
+                  {skill.is_verified && (
+                    <span className="text-xs font-semibold" style={{ color: "var(--burg-bright)" }}>✓</span>
                   )}
-                  <button onClick={() => removeSkill(skill.skill_name, section.type)} className="opacity-50 hover:opacity-100 transition-opacity">
-                    <X size={12} />
+                  {section.type === "teach" && !skill.is_verified && (
+                    <Link
+                      href={`/quiz?skill=${encodeURIComponent(skill.skill_name)}`}
+                      className="text-xs opacity-60 hover:opacity-100 transition-opacity"
+                      style={{ color: "var(--burg-bright)" }}
+                    >
+                      verify
+                    </Link>
+                  )}
+                  <button
+                    onClick={() => removeSkill(skill.skill_name, section.type)}
+                    className="opacity-40 hover:opacity-100 transition-opacity"
+                  >
+                    <X size={11} />
                   </button>
                 </div>
               ))}
               {section.skills.length === 0 && (
-                <p className="text-slate-500 text-sm">No skills added yet.</p>
+                <p className="text-sm" style={{ color: "var(--text-3)" }}>No skills added yet.</p>
               )}
             </div>
 
-            {/* Add skill picker */}
+            {/* Skill picker */}
             <AnimatePresence>
               {addingSkill === section.type && (
                 <motion.div
@@ -170,24 +220,40 @@ export default function ProfileClient({ profile, mySkills, ratings, userId }: Pr
                   exit={{ opacity: 0, height: 0 }}
                   className="overflow-hidden"
                 >
-                  <div className="p-4 rounded-xl bg-white/5 border border-white/10 max-h-64 overflow-y-auto">
+                  <div
+                    className="p-4 rounded-xl max-h-64 overflow-y-auto"
+                    style={{ background: "var(--bg-card)", border: "1px solid var(--border-soft)" }}
+                  >
                     <div className="flex items-center justify-between mb-3">
-                      <p className="text-sm font-medium text-slate-300">Pick a skill</p>
-                      <button onClick={() => setAddingSkill(null)} className="text-slate-500 hover:text-white">
-                        <X size={16} />
+                      <p className="text-sm font-medium" style={{ color: "var(--text-2)" }}>Pick a skill</p>
+                      <button onClick={() => setAddingSkill(null)} style={{ color: "var(--text-3)" }}>
+                        <X size={15} />
                       </button>
                     </div>
                     {Object.entries(SKILL_CATEGORIES).map(([cat, skills]) => (
                       <div key={cat} className="mb-4">
-                        <p className="text-xs text-slate-500 mb-2">{cat}</p>
+                        <p className="text-xs mb-2 font-semibold uppercase tracking-wider" style={{ color: "var(--text-3)" }}>{cat}</p>
                         <div className="flex flex-wrap gap-1.5">
-                          {skills
+                          {(skills as string[])
                             .filter(s => !localSkills.find(ls => ls.skill_name === s && ls.skill_type === section.type))
                             .map(s => (
                               <button
                                 key={s}
                                 onClick={() => addSkill(s, section.type)}
-                                className="text-xs px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-slate-300 hover:border-white/30 hover:text-white transition-all"
+                                className="text-xs px-2.5 py-1 rounded-lg transition-all"
+                                style={{
+                                  background: "rgba(255,255,255,0.03)",
+                                  border: "1px solid var(--border-soft)",
+                                  color: "var(--text-2)"
+                                }}
+                                onMouseEnter={e => {
+                                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(155,27,48,0.28)";
+                                  (e.currentTarget as HTMLElement).style.color = "var(--text)";
+                                }}
+                                onMouseLeave={e => {
+                                  (e.currentTarget as HTMLElement).style.borderColor = "var(--border-soft)";
+                                  (e.currentTarget as HTMLElement).style.color = "var(--text-2)";
+                                }}
                               >
                                 {getSkillEmoji(s)} {s}
                               </button>
@@ -205,25 +271,33 @@ export default function ProfileClient({ profile, mySkills, ratings, userId }: Pr
         {/* Reviews */}
         {ratings.length > 0 && (
           <div>
-            <h2 className="text-xl font-black mb-4">Reviews</h2>
+            <h2 className="text-base font-black mb-4" style={{ color: "var(--text)" }}>Reviews</h2>
             <div className="space-y-3">
               {ratings.map((r, i) => (
                 <motion.div
                   key={r.id}
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
-                  className="p-4 rounded-xl bg-white/5 border border-white/10"
+                  className="p-4 rounded-xl"
+                  style={{ background: "var(--bg-card)", border: "1px solid var(--border-soft)" }}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <span className="font-semibold text-sm">{r.rater?.full_name || "Anonymous"}</span>
+                    <span className="font-semibold text-sm" style={{ color: "var(--text)" }}>
+                      {r.rater?.full_name || "Anonymous"}
+                    </span>
                     <div className="flex gap-0.5">
                       {Array.from({ length: 5 }).map((_, j) => (
-                        <Star key={j} size={14} fill={j < r.stars ? "#f59e0b" : "none"} className={j < r.stars ? "text-amber-400" : "text-slate-600"} />
+                        <Star
+                          key={j}
+                          size={13}
+                          fill={j < r.stars ? "currentColor" : "none"}
+                          style={{ color: j < r.stars ? "var(--coin)" : "var(--text-3)" }}
+                        />
                       ))}
                     </div>
                   </div>
-                  {r.review && <p className="text-slate-400 text-sm">{r.review}</p>}
+                  {r.review && <p className="text-sm" style={{ color: "var(--text-2)" }}>{r.review}</p>}
                 </motion.div>
               ))}
             </div>

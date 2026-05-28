@@ -37,71 +37,114 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: "var(--bg)" }}>
+      {/* Ambient orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 -left-40 w-80 h-80 rounded-full bg-brand-500/10 blur-[100px]" />
-        <div className="absolute bottom-1/4 -right-40 w-80 h-80 rounded-full bg-accent-500/10 blur-[100px]" />
+        <div
+          className="orb animate-pulse-slow"
+          style={{ width: 480, height: 480, top: "10%", left: "-15%", background: "radial-gradient(circle, rgba(155,27,48,0.10) 0%, transparent 70%)" }}
+        />
+        <div
+          className="orb animate-pulse-slow"
+          style={{ width: 360, height: 360, bottom: "10%", right: "-12%", background: "radial-gradient(circle, rgba(78,111,133,0.07) 0%, transparent 70%)", animationDelay: "1.5s" }}
+        />
       </div>
 
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 22 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className="relative w-full max-w-md"
       >
+        {/* Logo */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 text-2xl font-bold">
-            <span>🔄</span>
-            <span className="gradient-text">Skill Swap</span>
+          <Link href="/" className="inline-flex items-center gap-2.5 justify-center mb-4">
+            <div
+              className="w-8 h-8 rounded-xl flex items-center justify-center"
+              style={{ background: "linear-gradient(135deg, #9B1B30, #620018)", boxShadow: "0 2px 16px rgba(155,27,48,0.45)" }}
+            >
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                <path d="M2 8h5M9 8h5M8 2v5M8 9v5" stroke="white" strokeWidth="2.2" strokeLinecap="round"/>
+              </svg>
+            </div>
+            <span className="font-bold text-lg tracking-tight gradient-text">Skill Swap</span>
           </Link>
-          <h1 className="text-2xl font-black text-white mt-4 mb-2">Welcome back</h1>
-          <p className="text-slate-400 text-sm">Sign in to continue swapping</p>
+          <h1 className="text-2xl font-black mb-2" style={{ color: "var(--text)" }}>Welcome back</h1>
+          <p className="text-sm" style={{ color: "var(--text-2)" }}>Sign in to continue swapping</p>
         </div>
 
-        <div className="glass-dark rounded-2xl p-8 border border-white/10">
+        <div
+          className="rounded-2xl p-8"
+          style={{ background: "var(--bg-card)", border: "1px solid var(--border-soft)" }}
+        >
+          {/* Google */}
           <button
             onClick={handleGoogle}
-            className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-white/20 bg-white/5 text-white hover:bg-white/10 transition-all font-medium mb-6"
+            className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl font-medium transition-all mb-6"
+            style={{
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid var(--border-soft)",
+              color: "var(--text-2)"
+            }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.07)";
+              (e.currentTarget as HTMLElement).style.color = "var(--text)";
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.04)";
+              (e.currentTarget as HTMLElement).style.color = "var(--text-2)";
+            }}
           >
-            <Chrome size={18} />
+            <Chrome size={17} />
             Continue with Google
           </button>
 
           <div className="flex items-center gap-3 mb-6">
-            <div className="flex-1 h-px bg-white/10" />
-            <span className="text-slate-500 text-sm">or</span>
-            <div className="flex-1 h-px bg-white/10" />
+            <div className="flex-1 h-px" style={{ background: "var(--border-soft)" }} />
+            <span className="text-sm" style={{ color: "var(--text-3)" }}>or</span>
+            <div className="flex-1 h-px" style={{ background: "var(--border-soft)" }} />
           </div>
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="relative">
-              <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Mail size={15} className="absolute left-4 top-1/2 -translate-y-1/2" style={{ color: "var(--text-3)" }} />
               <input
                 type="email"
                 placeholder="Email"
                 value={form.email}
                 onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
                 required
-                className="w-full pl-11 pr-4 py-3 rounded-xl border border-white/10 bg-white/5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent transition-all"
+                className="input-base pl-11"
               />
             </div>
 
             <div className="relative">
-              <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Lock size={15} className="absolute left-4 top-1/2 -translate-y-1/2" style={{ color: "var(--text-3)" }} />
               <input
                 type={showPw ? "text" : "password"}
                 placeholder="Password"
                 value={form.password}
                 onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
                 required
-                className="w-full pl-11 pr-12 py-3 rounded-xl border border-white/10 bg-white/5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent transition-all"
+                className="input-base pl-11 pr-12"
               />
-              <button type="button" onClick={() => setShowPw(v => !v)} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors">
-                {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
+              <button
+                type="button"
+                onClick={() => setShowPw(v => !v)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 transition-colors"
+                style={{ color: "var(--text-3)" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--text)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--text-3)"; }}
+              >
+                {showPw ? <EyeOff size={15} /> : <Eye size={15} />}
               </button>
             </div>
 
             {error && (
-              <div className="text-red-400 text-sm bg-red-500/10 rounded-lg px-4 py-3 border border-red-500/20">
+              <div
+                className="text-sm rounded-xl px-4 py-3"
+                style={{ background: "rgba(155,27,48,0.10)", border: "1px solid rgba(155,27,48,0.22)", color: "#E07080" }}
+              >
                 {error}
               </div>
             )}
@@ -109,7 +152,8 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full btn-primary flex items-center justify-center gap-2 py-3.5 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="btn-primary w-full flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+              style={{ padding: "0.85rem" }}
             >
               {loading ? (
                 <span className="flex items-center gap-2">
@@ -117,17 +161,17 @@ export default function LoginPage() {
                   Signing in…
                 </span>
               ) : (
-                <>
-                  Sign in
-                  <ArrowRight size={18} />
-                </>
+                <>Sign in <ArrowRight size={17} /></>
               )}
             </button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-slate-400">
+          <p className="mt-6 text-center text-sm" style={{ color: "var(--text-3)" }}>
             Don&apos;t have an account?{" "}
-            <Link href="/auth/signup" className="text-brand-400 hover:text-brand-300 font-semibold transition-colors">
+            <Link href="/auth/signup" className="font-semibold transition-colors" style={{ color: "var(--burg-bright)" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--text)"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--burg-bright)"; }}
+            >
               Sign up free
             </Link>
           </p>

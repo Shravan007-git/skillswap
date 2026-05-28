@@ -15,18 +15,18 @@ interface Question {
 
 function QuizContent() {
   const searchParams = useSearchParams();
-  const router = useRouter();
-  const skill = searchParams.get("skill") || "";
-  const supabase = createClient();
+  const router       = useRouter();
+  const skill        = searchParams.get("skill") || "";
+  const supabase     = createClient();
 
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [current, setCurrent] = useState(0);
-  const [selected, setSelected] = useState<number | null>(null);
-  const [answers, setAnswers] = useState<(number | null)[]>([]);
-  const [revealed, setRevealed] = useState(false);
-  const [finished, setFinished] = useState(false);
-  const [saving, setSaving] = useState(false);
+  const [loading, setLoading]     = useState(true);
+  const [current, setCurrent]     = useState(0);
+  const [selected, setSelected]   = useState<number | null>(null);
+  const [answers, setAnswers]     = useState<(number | null)[]>([]);
+  const [revealed, setRevealed]   = useState(false);
+  const [finished, setFinished]   = useState(false);
+  const [saving, setSaving]       = useState(false);
 
   useEffect(() => {
     if (!skill) return;
@@ -36,10 +36,7 @@ function QuizContent() {
       body: JSON.stringify({ skill }),
     })
       .then(r => r.json())
-      .then(d => {
-        setQuestions(d.questions || []);
-        setLoading(false);
-      });
+      .then(d => { setQuestions(d.questions || []); setLoading(false); });
   }, [skill]);
 
   function handleSelect(idx: number) {
@@ -54,101 +51,120 @@ function QuizContent() {
     setSelected(null);
 
     if (current + 1 >= questions.length) {
-      // Calculate score and finish
       const score = newAnswers.filter((a, i) => a === questions[i].correct).length;
       setFinished(true);
-      saveResult(score, newAnswers);
+      saveResult(score);
     } else {
       setCurrent(c => c + 1);
     }
   }
 
-  async function saveResult(score: number, finalAnswers: (number | null)[]) {
+  async function saveResult(score: number) {
     setSaving(true);
     const passed = score >= 3;
     const { data: { user } } = await supabase.auth.getUser();
     if (user && passed) {
-      await supabase.from("user_skills")
-        .upsert({
-          user_id: user.id,
-          skill_name: skill,
-          skill_type: "teach",
-          is_verified: true,
-          level: score === 5 ? "expert" : score === 4 ? "intermediate" : "beginner",
-        }, { onConflict: "user_id,skill_name,skill_type" });
+      await supabase.from("user_skills").upsert({
+        user_id: user.id,
+        skill_name: skill,
+        skill_type: "teach",
+        is_verified: true,
+        level: score === 5 ? "expert" : score === 4 ? "intermediate" : "beginner",
+      }, { onConflict: "user_id,skill_name,skill_type" });
     }
     setSaving(false);
   }
 
-  const score = answers.filter((a, i) => a === questions[i]?.correct).length;
+  const score  = answers.filter((a, i) => a === questions[i]?.correct).length;
   const passed = finished && score >= 3;
 
   if (loading) return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">
+    <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--bg)" }}>
       <div className="text-center">
-        <Loader2 size={48} className="animate-spin text-brand-400 mx-auto mb-4" />
-        <p className="text-slate-400">Generating your {skill} quiz…</p>
-        <p className="text-slate-600 text-sm mt-2">Claude is crafting 5 smart questions</p>
+        <Loader2 size={44} className="animate-spin mx-auto mb-4" style={{ color: "var(--burg-bright)" }} />
+        <p className="text-sm" style={{ color: "var(--text-2)" }}>Generating your {skill} quiz…</p>
+        <p className="text-xs mt-2" style={{ color: "var(--text-3)" }}>Crafting 5 skill-check questions</p>
       </div>
     </div>
   );
 
   if (finished) return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 text-white">
+    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: "var(--bg)" }}>
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
+        initial={{ opacity: 0, scale: 0.92 }}
         animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         className="max-w-md w-full text-center"
       >
-        <div className="text-6xl mb-6">{passed ? "🏆" : "😅"}</div>
-        <h2 className="text-3xl font-black mb-3">
+        <div
+          className="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl mx-auto mb-6"
+          style={{
+            background: passed ? "rgba(155,27,48,0.12)" : "rgba(255,255,255,0.05)",
+            border: `1px solid ${passed ? "rgba(155,27,48,0.28)" : "var(--border-soft)"}`
+          }}
+        >
+          {passed ? <Trophy size={36} style={{ color: "var(--coin)" }} /> : <span>—</span>}
+        </div>
+
+        <h2 className="text-3xl font-black mb-3" style={{ color: "var(--text)" }}>
           {passed ? "You're verified!" : "Not quite yet"}
         </h2>
-        <p className="text-slate-400 mb-6">
-          You scored <span className="text-white font-bold">{score}/5</span> on the {skill} quiz.
-          {passed
-            ? " You've earned the Verified badge! 🎉"
-            : " Score 3+ to get verified. Try again!"}
+        <p className="mb-6" style={{ color: "var(--text-2)" }}>
+          You scored{" "}
+          <span className="font-bold" style={{ color: "var(--text)" }}>{score}/5</span>
+          {" "}on the {skill} quiz.
+          {passed ? " Your verified badge is live." : " Score 3 or more to get verified."}
         </p>
 
         {/* Score bar */}
-        <div className="bg-white/5 rounded-full h-3 mb-8">
+        <div className="rounded-full h-2.5 mb-8" style={{ background: "rgba(255,255,255,0.06)" }}>
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${(score / 5) * 100}%` }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className={`h-3 rounded-full ${passed ? "bg-gradient-to-r from-emerald-400 to-brand-400" : "bg-gradient-to-r from-red-400 to-amber-400"}`}
+            transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+            className="h-2.5 rounded-full"
+            style={{ background: passed ? "linear-gradient(90deg, #9B1B30, #C8A96E)" : "linear-gradient(90deg, #4e6f85, #8896A6)" }}
           />
         </div>
 
         {passed && (
-          <div className="flex items-center justify-center gap-2 mb-8 px-4 py-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300">
-            <Check size={18} />
-            <span className="font-semibold">{getSkillEmoji(skill)} {skill} — Verified ✅</span>
+          <div
+            className="flex items-center justify-center gap-2 mb-8 px-4 py-3 rounded-xl text-sm font-semibold"
+            style={{ background: "rgba(155,27,48,0.10)", border: "1px solid rgba(155,27,48,0.24)", color: "#E07080" }}
+          >
+            <Check size={16} />
+            {getSkillEmoji(skill)} {skill} — Verified
           </div>
         )}
 
         <div className="flex gap-3">
           <button
             onClick={() => router.back()}
-            className="flex-1 py-3 rounded-xl border border-white/10 text-slate-400 hover:text-white hover:border-white/20 transition-all"
+            className="flex-1 py-3 rounded-xl transition-all text-sm font-medium"
+            style={{ border: "1px solid var(--border-soft)", color: "var(--text-2)" }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--text)"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--text-2)"; }}
           >
             Back to profile
           </button>
           {!passed && (
             <button
-              onClick={() => { setCurrent(0); setAnswers([]); setSelected(null); setFinished(false); setLoading(true);
+              onClick={() => {
+                setCurrent(0); setAnswers([]); setSelected(null); setFinished(false); setLoading(true);
                 fetch("/api/quiz/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ skill }) })
                   .then(r => r.json()).then(d => { setQuestions(d.questions || []); setLoading(false); });
               }}
-              className="flex-1 btn-primary py-3"
+              className="flex-1 btn-primary py-3 text-sm"
             >
               Try again
             </button>
           )}
           {passed && (
-            <button onClick={() => router.push("/feed")} className="flex-1 btn-primary py-3 flex items-center justify-center gap-2">
-              Go to feed <ArrowRight size={16} />
+            <button
+              onClick={() => router.push("/feed")}
+              className="flex-1 btn-primary py-3 flex items-center justify-center gap-2 text-sm"
+            >
+              Go to feed <ArrowRight size={15} />
             </button>
           )}
         </div>
@@ -159,63 +175,86 @@ function QuizContent() {
   const q = questions[current];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4" style={{ background: "var(--bg)" }}>
       <div className="w-full max-w-xl">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="text-4xl mb-3">{getSkillEmoji(skill)}</div>
-          <h2 className="text-2xl font-black">{skill} Verification</h2>
-          <p className="text-slate-400 text-sm mt-1">Question {current + 1} of {questions.length}</p>
+          <div className="text-3xl mb-3">{getSkillEmoji(skill)}</div>
+          <h2 className="text-2xl font-black mb-1" style={{ color: "var(--text)" }}>{skill} Verification</h2>
+          <p className="text-sm" style={{ color: "var(--text-2)" }}>Question {current + 1} of {questions.length}</p>
         </div>
 
         {/* Progress dots */}
         <div className="flex justify-center gap-2 mb-8">
           {questions.map((_, i) => (
-            <div key={i} className={`w-2 h-2 rounded-full transition-all ${
-              i < current ? "bg-emerald-400" :
-              i === current ? "bg-brand-400 scale-125" :
-              "bg-white/20"
-            }`} />
+            <div
+              key={i}
+              className="w-2 h-2 rounded-full transition-all"
+              style={{
+                background: i < current ? "rgba(155,27,48,0.6)" : i === current ? "var(--burg-bright)" : "rgba(255,255,255,0.12)",
+                transform: i === current ? "scale(1.35)" : "scale(1)"
+              }}
+            />
           ))}
         </div>
 
         <AnimatePresence mode="wait">
           <motion.div
             key={current}
-            initial={{ opacity: 0, x: 30 }}
+            initial={{ opacity: 0, x: 28 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -30 }}
+            exit={{ opacity: 0, x: -28 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           >
             {/* Question */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10 mb-6">
-              <p className="text-lg font-medium leading-relaxed">{q.question}</p>
+            <div
+              className="p-6 rounded-xl mb-5"
+              style={{ background: "var(--bg-card)", border: "1px solid var(--border-soft)" }}
+            >
+              <p className="text-base font-medium leading-relaxed" style={{ color: "var(--text)" }}>{q.question}</p>
             </div>
 
             {/* Options */}
             <div className="space-y-3">
               {q.options.map((opt, i) => {
                 const isSelected = selected === i;
-                const isCorrect = i === q.correct;
+                const isCorrect  = i === q.correct;
                 const showResult = revealed;
+
+                let optStyle: React.CSSProperties;
+                if (showResult && isCorrect) {
+                  optStyle = { background: "rgba(155,27,48,0.14)", border: "1px solid rgba(155,27,48,0.32)", color: "#E07080" };
+                } else if (showResult && isSelected && !isCorrect) {
+                  optStyle = { background: "rgba(78,111,133,0.10)", border: "1px solid rgba(78,111,133,0.28)", color: "var(--steel)" };
+                } else if (isSelected) {
+                  optStyle = { background: "rgba(155,27,48,0.08)", border: "1px solid rgba(155,27,48,0.28)", color: "var(--text)" };
+                } else {
+                  optStyle = { background: "rgba(255,255,255,0.03)", border: "1px solid var(--border-soft)", color: "var(--text-2)" };
+                }
 
                 return (
                   <button
                     key={i}
                     onClick={() => handleSelect(i)}
-                    className={`w-full text-left px-5 py-4 rounded-xl border-2 transition-all font-medium ${
-                      showResult && isCorrect
-                        ? "border-emerald-500 bg-emerald-500/20 text-emerald-300"
-                        : showResult && isSelected && !isCorrect
-                        ? "border-red-500 bg-red-500/20 text-red-300"
-                        : isSelected
-                        ? "border-brand-500 bg-brand-500/20 text-brand-300"
-                        : "border-white/10 bg-white/5 text-slate-300 hover:border-white/20 hover:bg-white/10"
-                    }`}
+                    className="w-full text-left px-5 py-4 rounded-xl transition-all font-medium text-sm"
+                    style={optStyle}
+                    onMouseEnter={e => {
+                      if (!isSelected && !revealed) {
+                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(155,27,48,0.24)";
+                        (e.currentTarget as HTMLElement).style.color = "var(--text)";
+                      }
+                    }}
+                    onMouseLeave={e => {
+                      if (!isSelected && !revealed) {
+                        (e.currentTarget as HTMLElement).style.borderColor = "var(--border-soft)";
+                        (e.currentTarget as HTMLElement).style.color = "var(--text-2)";
+                      }
+                    }}
                   >
                     <span className="flex items-center justify-between">
                       {opt}
-                      {showResult && isCorrect && <Check size={18} className="text-emerald-400" />}
-                      {showResult && isSelected && !isCorrect && <X size={18} className="text-red-400" />}
+                      {showResult && isCorrect  && <Check size={16} style={{ color: "#E07080" }} />}
+                      {showResult && isSelected && !isCorrect && <X size={16} style={{ color: "var(--steel)" }} />}
                     </span>
                   </button>
                 );
@@ -230,16 +269,21 @@ function QuizContent() {
             <button
               onClick={() => setRevealed(true)}
               disabled={selected === null}
-              className="btn-primary px-8 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-primary px-8 disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{ padding: "0.75rem 2rem" }}
             >
               Check answer
             </button>
           ) : (
-            <button onClick={handleNext} className="btn-primary px-8 py-3 flex items-center gap-2">
+            <button
+              onClick={handleNext}
+              className="btn-primary flex items-center gap-2"
+              style={{ padding: "0.75rem 2rem" }}
+            >
               {current + 1 === questions.length ? (
-                <><Trophy size={18} /> See results</>
+                <><Trophy size={16} /> See results</>
               ) : (
-                <>Next <ArrowRight size={18} /></>
+                <>Next <ArrowRight size={16} /></>
               )}
             </button>
           )}
@@ -252,8 +296,8 @@ function QuizContent() {
 export default function QuizPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <Loader2 size={48} className="animate-spin text-brand-400" />
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--bg)" }}>
+        <Loader2 size={44} className="animate-spin" style={{ color: "var(--burg-bright)" }} />
       </div>
     }>
       <QuizContent />

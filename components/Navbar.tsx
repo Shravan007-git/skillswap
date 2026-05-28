@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { LayoutDashboard, Search, Wallet, User, LogOut, Coins } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
   { href: "/feed",      icon: Search,          label: "Discover" },
@@ -37,8 +36,8 @@ export default function Navbar({ coins = 0 }: { coins?: number }) {
           <div
             className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
             style={{
-              background: "linear-gradient(135deg, #C42B2B, #8B1A1A)",
-              boxShadow: "0 2px 10px rgba(196,43,43,0.35)"
+              background: "linear-gradient(135deg, #9B1B30, #620018)",
+              boxShadow: "0 2px 10px rgba(155,27,48,0.4)"
             }}
           >
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
@@ -57,9 +56,9 @@ export default function Navbar({ coins = 0 }: { coins?: number }) {
                 href={item.href}
                 className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all"
                 style={active ? {
-                  background: "rgba(196,43,43,0.10)",
-                  color: "#E07070",
-                  border: "1px solid rgba(196,43,43,0.18)"
+                  background: "rgba(155,27,48,0.12)",
+                  color: "#E07080",
+                  border: "1px solid rgba(155,27,48,0.22)"
                 } : {
                   color: "var(--text-2)",
                   border: "1px solid transparent"
@@ -76,8 +75,8 @@ export default function Navbar({ coins = 0 }: { coins?: number }) {
         <div
           className="px-4 py-3 rounded-xl mb-3"
           style={{
-            background: "rgba(212,168,83,0.06)",
-            border: "1px solid rgba(212,168,83,0.14)"
+            background: "rgba(200,169,110,0.06)",
+            border: "1px solid rgba(200,169,110,0.14)"
           }}
         >
           <div className="flex items-center gap-2">
@@ -109,7 +108,7 @@ export default function Navbar({ coins = 0 }: { coins?: number }) {
       <nav
         className="md:hidden fixed bottom-0 inset-x-0 z-40 flex items-center justify-around py-2 px-2"
         style={{
-          background: "rgba(16,8,8,0.95)",
+          background: "rgba(8,12,16,0.96)",
           backdropFilter: "blur(20px)",
           WebkitBackdropFilter: "blur(20px)",
           borderTop: "1px solid var(--border-soft)"
@@ -122,7 +121,7 @@ export default function Navbar({ coins = 0 }: { coins?: number }) {
               key={item.href}
               href={item.href}
               className="flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all text-xs font-medium"
-              style={{ color: active ? "var(--blood)" : "var(--text-3)" }}
+              style={{ color: active ? "#E07080" : "var(--text-3)" }}
             >
               <item.icon size={19} />
               {item.label}

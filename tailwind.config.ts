@@ -9,50 +9,58 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Bloodstone — deep crimson reds
-        blood: {
-          50:  "#fdf2f2",
-          100: "#fad5d5",
-          200: "#f5a8a8",
-          300: "#eb6e6e",
-          400: "#d94040",
-          500: "#C42B2B",
-          600: "#A01F1F",
-          700: "#7D1414",
-          800: "#5A0C0C",
-          900: "#380606",
-          950: "#1E0303",
+        // Gunmetal — dark blue-grey metallic
+        gunmetal: {
+          50:  "#f0f2f4",
+          100: "#d8dde3",
+          200: "#b2bbc6",
+          300: "#8896a6",
+          400: "#617585",
+          500: "#445566",
+          600: "#334455",
+          700: "#243040",
+          800: "#161D27",
+          900: "#0D1117",
+          950: "#080C10",
         },
-        // Misty sage — muted dusty greens
-        sage: {
-          50:  "#f2f6f2",
-          100: "#deeade",
-          200: "#bad5bb",
-          300: "#8FBA91",
-          400: "#6B9E6E",
-          500: "#507A53",
-          600: "#3C5E3F",
-          700: "#2A432C",
-          800: "#1A2B1C",
-          900: "#0E170F",
-          950: "#070D08",
+        // Burgundy — deep wine red
+        burgundy: {
+          50:  "#fdf0f2",
+          100: "#fad5da",
+          200: "#f2a8b3",
+          300: "#e07080",
+          400: "#c83850",
+          500: "#9B1B30",
+          600: "#800020",
+          700: "#620018",
+          800: "#450010",
+          900: "#2C000A",
+          950: "#160004",
         },
-        surface: {
-          50:  "#F5EFEF",
-          900: "#110909",
-          925: "#0D0707",
-          950: "#080505",
+        // Warm silver / steel highlights
+        steel: {
+          50:  "#f4f6f8",
+          100: "#e2e8ed",
+          200: "#c4d0db",
+          300: "#9aafc0",
+          400: "#6e8ea3",
+          500: "#4e6f85",
+          600: "#3a556b",
+          700: "#2a3d50",
+          800: "#1C2A36",
+          900: "#111820",
+          950: "#080C10",
         },
-        coin: "#D4A853",
+        coin: "#C8A96E",
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
       },
       animation: {
         "fade-in":       "fadeIn 0.5s ease-out",
-        "slide-up":      "slideUp 0.5s cubic-bezier(0.16,1,0.3,1)",
+        "slide-up":      "slideUp 0.6s cubic-bezier(0.16,1,0.3,1)",
         "slide-right":   "slideInRight 0.5s cubic-bezier(0.16,1,0.3,1)",
-        "float":         "float 6s ease-in-out infinite",
+        "float":         "float 7s ease-in-out infinite",
         "pulse-slow":    "pulseSlow 3s ease-in-out infinite",
         "shimmer":       "shimmer 2s infinite",
         "ripple":        "rippleOut 0.9s ease-out forwards",
@@ -63,7 +71,7 @@ const config: Config = {
           "100%": { opacity: "1" },
         },
         slideUp: {
-          "0%":   { opacity: "0", transform: "translateY(24px)" },
+          "0%":   { opacity: "0", transform: "translateY(28px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
         slideInRight: {
@@ -72,10 +80,10 @@ const config: Config = {
         },
         float: {
           "0%, 100%": { transform: "translateY(0px)" },
-          "50%":      { transform: "translateY(-12px)" },
+          "50%":      { transform: "translateY(-14px)" },
         },
         pulseSlow: {
-          "0%, 100%": { opacity: "0.6" },
+          "0%, 100%": { opacity: "0.5" },
           "50%":      { opacity: "1" },
         },
         shimmer: {

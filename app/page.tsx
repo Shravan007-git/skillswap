@@ -50,39 +50,44 @@ const SKILLS = [
   "Photoshop", "UI/UX Design", "Digital Marketing", "Content Writing",
 ];
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 28 },
+  show:   { opacity: 1, y: 0 },
+};
+
 export default function LandingPage() {
   const { scrollY } = useScroll();
-  const heroY = useTransform(scrollY, [0, 500], [0, -80]);
+  const heroY       = useTransform(scrollY, [0, 500], [0, -80]);
   const heroOpacity = useTransform(scrollY, [0, 400], [1, 0.4]);
 
   return (
     <div className="min-h-screen overflow-x-hidden" style={{ background: "var(--bg)" }}>
 
-      {/* ── Ambient background orbs ─────────────────── */}
+      {/* ── Ambient orbs ────────────────────────────── */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         <div
-          className="absolute rounded-full blur-[160px] animate-pulse-slow"
+          className="orb animate-pulse-slow"
           style={{
-            width: 600, height: 600,
-            top: "10%", left: "-15%",
-            background: "radial-gradient(circle, rgba(196,43,43,0.10) 0%, transparent 70%)"
+            width: 640, height: 640,
+            top: "5%", left: "-18%",
+            background: "radial-gradient(circle, rgba(155,27,48,0.10) 0%, transparent 70%)"
           }}
         />
         <div
-          className="absolute rounded-full blur-[200px] animate-pulse-slow"
+          className="orb animate-pulse-slow"
           style={{
             width: 500, height: 500,
-            top: "40%", right: "-10%",
-            background: "radial-gradient(circle, rgba(107,158,110,0.08) 0%, transparent 70%)",
-            animationDelay: "1.5s"
+            top: "45%", right: "-12%",
+            background: "radial-gradient(circle, rgba(78,111,133,0.08) 0%, transparent 70%)",
+            animationDelay: "1.8s"
           }}
         />
         <div
-          className="absolute rounded-full blur-[180px]"
+          className="orb"
           style={{
             width: 400, height: 400,
-            bottom: "10%", left: "30%",
-            background: "radial-gradient(circle, rgba(196,43,43,0.06) 0%, transparent 70%)"
+            bottom: "8%", left: "28%",
+            background: "radial-gradient(circle, rgba(155,27,48,0.06) 0%, transparent 70%)"
           }}
         />
       </div>
@@ -91,9 +96,9 @@ export default function LandingPage() {
       <nav
         className="fixed top-0 inset-x-0 z-50"
         style={{
-          background: "rgba(8,5,5,0.8)",
-          backdropFilter: "blur(24px) saturate(1.6)",
-          WebkitBackdropFilter: "blur(24px) saturate(1.6)",
+          background: "rgba(8,12,16,0.82)",
+          backdropFilter: "blur(24px) saturate(1.5)",
+          WebkitBackdropFilter: "blur(24px) saturate(1.5)",
           borderBottom: "1px solid var(--border-soft)"
         }}
       >
@@ -101,7 +106,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-2.5">
             <div
               className="w-7 h-7 rounded-lg flex items-center justify-center"
-              style={{ background: "linear-gradient(135deg, #C42B2B, #8B1A1A)", boxShadow: "0 2px 12px rgba(196,43,43,0.4)" }}
+              style={{ background: "linear-gradient(135deg, #9B1B30, #620018)", boxShadow: "0 2px 12px rgba(155,27,48,0.45)" }}
             >
               <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
                 <path d="M2 8h5M9 8h5M8 2v5M8 9v5" stroke="white" strokeWidth="2.2" strokeLinecap="round"/>
@@ -111,9 +116,9 @@ export default function LandingPage() {
           </div>
 
           <div className="hidden md:flex items-center gap-8 text-sm" style={{ color: "var(--text-2)" }}>
-            <a href="#how" className="transition-colors hover:text-white">How it works</a>
+            <a href="#how"  className="transition-colors hover:text-white">How it works</a>
             <a href="#swaps" className="transition-colors hover:text-white">Live swaps</a>
-            <a href="#why" className="transition-colors hover:text-white">Why us</a>
+            <a href="#why"  className="transition-colors hover:text-white">Why us</a>
           </div>
 
           <div className="flex items-center gap-3">
@@ -134,18 +139,26 @@ export default function LandingPage() {
           className="relative z-10 max-w-screen-xl mx-auto px-8 w-full"
         >
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 44 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
             className="max-w-4xl"
           >
-            <div
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold mb-8 section-label"
-              style={{ background: "rgba(196,43,43,0.07)", border: "1px solid rgba(196,43,43,0.18)", letterSpacing: "0.1em", color: "var(--blood)" }}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1, duration: 0.6 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold mb-8"
+              style={{
+                background: "rgba(155,27,48,0.08)",
+                border: "1px solid rgba(155,27,48,0.22)",
+                letterSpacing: "0.1em",
+                color: "var(--burg-bright)"
+              }}
             >
-              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: "var(--blood)" }} />
+              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: "var(--burg-bright)" }} />
               India's first verified skill-barter platform
-            </div>
+            </motion.div>
 
             <h1
               className="font-black leading-[1.04] tracking-tighter mb-8"
@@ -155,16 +168,24 @@ export default function LandingPage() {
               <span className="gradient-text">for what you want.</span>
             </h1>
 
-            <p
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.25, duration: 0.7 }}
               className="text-lg leading-relaxed mb-10 max-w-xl"
               style={{ color: "var(--text-2)" }}
             >
               You teach Python, I teach Figma. You teach Excel, I teach guitar.
-              No money changes hands. Just two people trading what they know.
-              Over 12,400 students and professionals are already on here.
-            </p>
+              No money changes hands — just two people trading what they know.
+              Over 12,400 students and professionals are already here.
+            </motion.p>
 
-            <div className="flex flex-col sm:flex-row gap-4 mb-20">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35, duration: 0.6 }}
+              className="flex flex-col sm:flex-row gap-4 mb-20"
+            >
               <Link href="/auth/signup" className="btn-primary flex items-center gap-2">
                 Start swapping — it's free
                 <ArrowRight size={16} />
@@ -173,16 +194,16 @@ export default function LandingPage() {
                 See how it works
                 <ChevronRight size={16} />
               </a>
-            </div>
+            </motion.div>
 
             {/* Skill tags */}
             <div className="flex flex-wrap gap-2">
               {SKILLS.map((skill, i) => (
                 <motion.span
                   key={skill}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 + i * 0.035, duration: 0.4 }}
+                  initial={{ opacity: 0, scale: 0.88 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.5 + i * 0.03, duration: 0.35, ease: "easeOut" }}
                   className="px-3 py-1.5 text-xs font-medium rounded-lg transition-all cursor-default"
                   style={{
                     background: "rgba(255,255,255,0.03)",
@@ -199,16 +220,17 @@ export default function LandingPage() {
       </section>
 
       {/* ── Stats ───────────────────────────────────── */}
-      <section id="stats" style={{ borderTop: "1px solid var(--border-soft)", borderBottom: "1px solid var(--border-soft)" }}>
+      <section style={{ borderTop: "1px solid var(--border-soft)", borderBottom: "1px solid var(--border-soft)" }}>
         <div className="max-w-screen-xl mx-auto px-8 py-16">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
             {STATS.map((s, i) => (
               <motion.div
                 key={s.label}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.5 }}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ delay: i * 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               >
                 <div className="text-4xl font-black mb-1 gradient-text">{s.value}</div>
                 <div className="text-sm" style={{ color: "var(--text-2)" }}>{s.label}</div>
@@ -222,9 +244,11 @@ export default function LandingPage() {
       <section id="how" className="py-32">
         <div className="max-w-screen-xl mx-auto px-8">
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="mb-16"
           >
             <div className="section-label mb-4">How it works</div>
@@ -237,15 +261,16 @@ export default function LandingPage() {
             {HOW.map((step, i) => (
               <motion.div
                 key={step.n}
-                initial={{ opacity: 0, y: 32 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.12, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ delay: i * 0.13, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
                 className="card p-6"
               >
                 <div
                   className="text-xs font-black mb-5 font-mono"
-                  style={{ color: "var(--blood)", letterSpacing: "0.05em" }}
+                  style={{ color: "var(--burg-bright)", letterSpacing: "0.05em" }}
                 >
                   {step.n}
                 </div>
@@ -261,27 +286,32 @@ export default function LandingPage() {
       <section id="swaps" className="py-24" style={{ borderTop: "1px solid var(--border-soft)" }}>
         <div className="max-w-screen-xl mx-auto px-8">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="show"
             viewport={{ once: true }}
+            transition={{ duration: 0.55 }}
             className="mb-12"
           >
             <div className="section-label mb-4">Live swaps</div>
             <h2 className="font-black tracking-tight" style={{ fontSize: "clamp(2rem, 4vw, 3rem)", color: "var(--text)" }}>
               Real trades, real people.
             </h2>
-            <p className="mt-3 text-base" style={{ color: "var(--text-2)" }}>These aren't made-up examples. These are actual swaps happening right now.</p>
+            <p className="mt-3 text-base" style={{ color: "var(--text-2)" }}>
+              These aren't made-up examples. These are actual swaps happening right now.
+            </p>
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {FEATURED_SWAPS.map((swap, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="show"
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.07 }}
-                className="card-flat p-4 flex items-center gap-4 transition-all hover:border-opacity-20"
+                transition={{ delay: i * 0.08, duration: 0.45 }}
+                className="card-flat p-4 flex items-center gap-4"
                 style={{ borderColor: "var(--border-soft)" }}
               >
                 <div className="flex-1 min-w-0">
@@ -315,18 +345,18 @@ export default function LandingPage() {
         <div className="max-w-screen-xl mx-auto px-8">
           <div className="grid lg:grid-cols-2 gap-24 items-center">
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
+              initial={{ opacity: 0, x: -36 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             >
               <div className="section-label mb-6">Why it works</div>
               <h2 className="font-black tracking-tight mb-6" style={{ fontSize: "clamp(2rem, 4vw, 3rem)", color: "var(--text)" }}>
                 Built around trust,<br />
-                <span className="gradient-text-sage">not just listings.</span>
+                <span className="gradient-text-steel">not just listings.</span>
               </h2>
               <p className="text-base leading-relaxed mb-10" style={{ color: "var(--text-2)" }}>
-                Most platforms let anyone claim they can teach anything. We verify every teacher before they show up in your feed. That single decision changes everything about the quality of people you meet here.
+                Most platforms let anyone claim they can teach anything. We verify every teacher before they show up in your feed. That one decision changes the quality of everyone you meet here.
               </p>
 
               <div className="space-y-6">
@@ -334,12 +364,12 @@ export default function LandingPage() {
                   {
                     icon: Shield,
                     title: "Verified teachers only",
-                    desc: "Every person who lists a teaching skill has taken a quiz to prove they know it. No self-reported expert badges."
+                    desc: "Every person listing a teaching skill has taken a quiz to prove they know it. No self-reported expert badges."
                   },
                   {
                     icon: TrendingUp,
                     title: "SwapCoin economy",
-                    desc: "Teach a session and earn coins. Spend them on any skill you want. You're never locked into one-to-one trades."
+                    desc: "Teach a session and earn coins. Spend them on any skill you want. Not locked into one-to-one trades."
                   },
                   {
                     icon: Award,
@@ -354,17 +384,17 @@ export default function LandingPage() {
                 ].map((f, i) => (
                   <motion.div
                     key={f.title}
-                    initial={{ opacity: 0, x: -20 }}
+                    initial={{ opacity: 0, x: -22 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: i * 0.1 }}
+                    transition={{ delay: i * 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                     className="flex gap-4 items-start"
                   >
                     <div
                       className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5"
-                      style={{ background: "rgba(196,43,43,0.08)", border: "1px solid rgba(196,43,43,0.15)" }}
+                      style={{ background: "rgba(155,27,48,0.10)", border: "1px solid rgba(155,27,48,0.18)" }}
                     >
-                      <f.icon size={16} style={{ color: "var(--blood)" }} />
+                      <f.icon size={16} style={{ color: "var(--burg-bright)" }} />
                     </div>
                     <div>
                       <div className="font-semibold text-sm mb-1" style={{ color: "var(--text)" }}>{f.title}</div>
@@ -377,17 +407,17 @@ export default function LandingPage() {
 
             {/* App preview card */}
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
+              initial={{ opacity: 0, x: 36 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             >
               <div
                 className="rounded-2xl p-6"
                 style={{
                   background: "var(--bg-card-2)",
                   border: "1px solid var(--border-soft)",
-                  boxShadow: "0 40px 80px rgba(0,0,0,0.5), 0 0 40px rgba(196,43,43,0.06)"
+                  boxShadow: "0 40px 80px rgba(0,0,0,0.55), 0 0 50px rgba(155,27,48,0.07)"
                 }}
               >
                 <div className="flex items-center justify-between mb-5">
@@ -398,17 +428,23 @@ export default function LandingPage() {
                   { name: "Priya S.", college: "BITS Pilani", offers: "React", wants: "Guitar", compat: 94, initials: "PS" },
                   { name: "Arjun K.", college: "IIT Delhi", offers: "ML", wants: "Figma", compat: 88, initials: "AK" },
                   { name: "Sneha R.", college: "NIT Warangal", offers: "Excel", wants: "Python", compat: 82, initials: "SR" },
-                ].map((m, i) => (
+                ].map((m) => (
                   <div
                     key={m.name}
                     className="flex items-center gap-3 mb-3 p-3 rounded-xl cursor-pointer transition-all"
                     style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--border-soft)" }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(196,43,43,0.2)"; (e.currentTarget as HTMLElement).style.background = "rgba(196,43,43,0.04)"; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "var(--border-soft)"; (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.02)"; }}
+                    onMouseEnter={e => {
+                      (e.currentTarget as HTMLElement).style.borderColor = "rgba(155,27,48,0.24)";
+                      (e.currentTarget as HTMLElement).style.background  = "rgba(155,27,48,0.05)";
+                    }}
+                    onMouseLeave={e => {
+                      (e.currentTarget as HTMLElement).style.borderColor = "var(--border-soft)";
+                      (e.currentTarget as HTMLElement).style.background  = "rgba(255,255,255,0.02)";
+                    }}
                   >
                     <div
                       className="w-9 h-9 rounded-xl flex items-center justify-center text-xs font-bold flex-shrink-0"
-                      style={{ background: "linear-gradient(135deg, #C42B2B, #8B1A1A)", color: "white" }}
+                      style={{ background: "linear-gradient(135deg, #9B1B30, #620018)", color: "white" }}
                     >
                       {m.initials}
                     </div>
@@ -440,12 +476,13 @@ export default function LandingPage() {
       <section className="py-32 relative overflow-hidden" style={{ borderTop: "1px solid var(--border-soft)" }}>
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: "radial-gradient(ellipse 80% 60% at 50% 100%, rgba(196,43,43,0.07) 0%, transparent 70%)" }}
+          style={{ background: "radial-gradient(ellipse 80% 60% at 50% 100%, rgba(155,27,48,0.08) 0%, transparent 70%)" }}
         />
         <div className="relative max-w-screen-xl mx-auto px-8">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="show"
             viewport={{ once: true }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             className="max-w-3xl"
@@ -485,7 +522,7 @@ export default function LandingPage() {
           <div className="flex gap-8 text-xs" style={{ color: "var(--text-3)" }}>
             <a href="#how" className="transition-colors hover:text-white">How it works</a>
             <Link href="/auth/signup" className="transition-colors hover:text-white">Sign up</Link>
-            <Link href="/auth/login" className="transition-colors hover:text-white">Sign in</Link>
+            <Link href="/auth/login"  className="transition-colors hover:text-white">Sign in</Link>
           </div>
         </div>
       </footer>
