@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import ClientEffects from "@/components/ClientEffects";
 
 export const metadata: Metadata = {
   title: "Skill Swap — Trade What You Know",
@@ -22,7 +23,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <ClientEffects />
+        {children}
+      </body>
     </html>
   );
 }
