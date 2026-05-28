@@ -10,6 +10,9 @@ export const metadata: Metadata = {
     description: "Trade skills, not money. India's first verified skill-barter platform.",
     type: "website",
   },
+  verification: {
+    google: "HsPN3vqjDHV31IYXD8D290i0e7UxixBuL7PE3kgTgaY",
+  },
 };
 
 export default function RootLayout({
